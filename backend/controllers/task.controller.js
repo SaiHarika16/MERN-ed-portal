@@ -50,14 +50,20 @@ export const getTasksForStudent = async (req, res) => {
   }
 };
 
-// Update task status (Student only)
 export const updateTaskStatus = async (req, res) => {
   try {
     const { taskId } = req.params;
     const { status } = req.body;
+    console.log("Received status:", status);
 
     if (req.user.role !== 'student') {
       return res.status(403).json({ message: 'Only students can update task status' });
+    }
+
+    // Validate allowed status values
+    const allowedStatuses = ['pending', 'progress', 'completed'];
+    if (!allowedStatuses.includes(status)) {
+      return res.status(400).json({ message: 'Invalid status value' });
     }
 
     const task = await Task.findById(taskId);
