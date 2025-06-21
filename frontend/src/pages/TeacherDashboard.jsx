@@ -3,6 +3,7 @@ import axios from 'axios';
 
 function TeacherDashboard() {
   const [students, setStudents] = useState([]);
+  const [tasks, setTasks] = useState([]);  // New: store tasks assigned by teacher
   const [form, setForm] = useState({
     title: '',
     description: '',
@@ -29,12 +30,28 @@ function TeacherDashboard() {
     fetchStudents();
   }, [token]);
 
-  // Handle form changes
+  // Fetch tasks assigned by this teacher
+  useEffect(() => {
+    const fetchAssignedTasks = async () => {
+      try {
+        const res = await axios.get('http://localhost:5000/api/tasks/assigned', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setTasks(res.data);
+      } catch (err) {
+        setMessage('Failed to fetch tasks');
+      }
+    };
+
+    fetchAssignedTasks();
+  }, [token]);
+
+  // Handle form input changes
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // Submit task
+  // Submit new task
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -43,6 +60,12 @@ function TeacherDashboard() {
       });
       setMessage('Task assigned successfully');
       setForm({ title: '', description: '', assignedTo: '' });
+
+      // Refresh tasks after assignment
+      const res = await axios.get('http://localhost:5000/api/tasks/assigned', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setTasks(res.data);
     } catch (err) {
       setMessage(err.response?.data?.message || 'Error assigning task');
     }
@@ -78,6 +101,20 @@ function TeacherDashboard() {
         </select>
         <button type="submit">Assign Task</button>
       </form>
+
+      <h3>Assigned Tasks</h3>
+      <ul>
+        {tasks.length === 0 && <li>No tasks assigned yet.</li>}
+        {tasks.map((task) => (
+          <li key={task._id} style={{ marginBottom: '1rem' }}>
+            <strong>{task.title}</strong> — {task.description}
+            <br />
+            Assigned to: {task.assignedTo.name} ({task.assignedTo.email})
+            <br />
+            Status: {task.status}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

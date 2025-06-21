@@ -1,3 +1,4 @@
+//task.controller.js
 import Task from '../models/Task.js';
 import User from '../models/User.js';
 
@@ -80,6 +81,22 @@ export const updateTaskStatus = async (req, res) => {
     await task.save();
 
     res.json(task);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// Get all tasks assigned BY the logged-in teacher
+export const getTasksForTeacher = async (req, res) => {
+  try {
+    if (req.user.role !== 'teacher') {
+      return res.status(403).json({ message: 'Only teachers can view this data' });
+    }
+
+    const tasks = await Task.find({ assignedBy: req.user._id })
+      .populate('assignedTo', 'name email');
+
+    res.json(tasks);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
