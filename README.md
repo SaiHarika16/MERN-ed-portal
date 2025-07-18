@@ -37,7 +37,7 @@ EduSphere is a full-stack web application designed for educational institutions,
 3. Configure environment variables as needed (see backend/config/db.js for DB connection).
 4. Start the backend server:
    ```bash
-   npm start
+   node server.js
    ```
 5. Start the frontend React app:
    ```bash
