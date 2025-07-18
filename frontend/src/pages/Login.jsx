@@ -43,7 +43,7 @@ function Login() {
           Login
         </Typography>
         {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-        <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
           <TextField
             name="email"
             label="Email"
@@ -54,18 +54,18 @@ function Login() {
             required
           />
           <TextField
-            name="password"
+          name="password"
             label="Password"
-            type="password"
+          type="password"
             fullWidth
             margin="normal"
-            onChange={handleChange}
-            required
-          />
+          onChange={handleChange}
+          required
+        />
           <Button type="submit" variant="contained" color="primary" fullWidth size="large" sx={{ mt: 2 }}>
             Login
           </Button>
-        </form>
+      </form>
         <Typography variant="body2" sx={{ mt: 2 }}>
           Don't have an account?{' '}
           <Link to="/register" style={{ color: '#1976d2', textDecoration: 'none', fontWeight: 500 }}>

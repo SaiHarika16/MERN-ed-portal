@@ -54,7 +54,7 @@ function StudentDashboard() {
         </Typography>
         {message && <Alert severity="info" sx={{ mb: 2 }}>{message}</Alert>}
         <List>
-          {tasks.map((task) => (
+        {tasks.map((task) => (
             <ListItem key={task._id} alignItems="flex-start" sx={{ mb: 2, borderBottom: '1px solid #eee' }}>
               <ListItemText
                 primary={<Typography fontWeight={600}>{task.title}</Typography>}
@@ -63,17 +63,17 @@ function StudentDashboard() {
               <FormControl sx={{ minWidth: 120 }} size="small">
                 <InputLabel>Status</InputLabel>
                 <Select
-                  value={task.status}
+              value={task.status}
                   label="Status"
-                  onChange={(e) => handleStatusChange(task._id, e.target.value)}
-                >
+              onChange={(e) => handleStatusChange(task._id, e.target.value)}
+            >
                   <MenuItem value="pending">Pending</MenuItem>
                   <MenuItem value="progress">In Progress</MenuItem>
                   <MenuItem value="completed">Completed</MenuItem>
                 </Select>
               </FormControl>
             </ListItem>
-          ))}
+        ))}
         </List>
       </Paper>
     </Box>

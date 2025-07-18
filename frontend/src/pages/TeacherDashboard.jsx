@@ -73,23 +73,23 @@ function TeacherDashboard() {
         {message && <Alert severity="info" sx={{ mb: 2 }}>{message}</Alert>}
         <form onSubmit={handleSubmit} style={{ marginBottom: 32 }}>
           <TextField
-            name="title"
+          name="title"
             label="Task Title"
-            value={form.title}
-            onChange={handleChange}
-            required
+          value={form.title}
+          onChange={handleChange}
+          required
             fullWidth
             margin="normal"
-          />
+        />
           <TextField
-            name="description"
+          name="description"
             label="Description"
-            value={form.description}
-            onChange={handleChange}
-            required
+          value={form.description}
+          onChange={handleChange}
+          required
             fullWidth
             margin="normal"
-          />
+        />
           <FormControl fullWidth margin="normal">
             <InputLabel id="student-label">Assign To</InputLabel>
             <Select
@@ -101,39 +101,39 @@ function TeacherDashboard() {
               required
             >
               <MenuItem value="">Select Student</MenuItem>
-              {students.map((s) => (
+          {students.map((s) => (
                 <MenuItem key={s._id} value={s._id}>
-                  {s.name} ({s.email})
+              {s.name} ({s.email})
                 </MenuItem>
-              ))}
+          ))}
             </Select>
           </FormControl>
           <Button type="submit" variant="contained" color="primary" size="large" sx={{ mt: 2 }}>
             Assign Task
           </Button>
-        </form>
+      </form>
         <Typography variant="h5" fontWeight={600} color="primary" gutterBottom>
           Assigned Tasks
         </Typography>
         <List>
           {tasks.length === 0 && <ListItem>No tasks assigned yet.</ListItem>}
-          {tasks.map((task) => (
+        {tasks.map((task) => (
             <ListItem key={task._id} alignItems="flex-start" sx={{ mb: 2, borderBottom: '1px solid #eee' }}>
               <ListItemText
                 primary={<Typography fontWeight={600}>{task.title}</Typography>}
                 secondary={<>
                   {task.description}
-                  <br />
+            <br />
                   <Typography variant="body2" color="text.secondary">
-                    Assigned to: {task.assignedTo.name} ({task.assignedTo.email})
+            Assigned to: {task.assignedTo.name} ({task.assignedTo.email})
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    Status: {task.status}
+            Status: {task.status}
                   </Typography>
                 </>}
               />
             </ListItem>
-          ))}
+        ))}
         </List>
       </Paper>
     </Box>

@@ -45,7 +45,7 @@ function Register() {
           Register
         </Typography>
         {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-        <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
           <TextField
             name="name"
             label="Name"
@@ -64,14 +64,14 @@ function Register() {
             required
           />
           <TextField
-            name="password"
+          name="password"
             label="Password"
-            type="password"
+          type="password"
             fullWidth
             margin="normal"
-            onChange={handleChange}
-            required
-          />
+          onChange={handleChange}
+          required
+        />
           <FormControl fullWidth margin="normal">
             <InputLabel id="role-label">Role</InputLabel>
             <Select
@@ -89,7 +89,7 @@ function Register() {
           <Button type="submit" variant="contained" color="primary" fullWidth size="large" sx={{ mt: 2 }}>
             Register
           </Button>
-        </form>
+      </form>
         <Typography variant="body2" sx={{ mt: 2 }}>
           Already have an account?{' '}
           <Link to="/login" style={{ color: '#1976d2', textDecoration: 'none', fontWeight: 500 }}>

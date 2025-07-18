@@ -40,27 +40,27 @@ function AdminDashboard() {
           Teachers
         </Typography>
         <List>
-          {teachers.map((teacher) => (
+        {teachers.map((teacher) => (
             <ListItem key={teacher._id}>
               <ListItemText
                 primary={<Typography fontWeight={600}>{teacher.name}</Typography>}
                 secondary={teacher.email}
               />
             </ListItem>
-          ))}
+        ))}
         </List>
         <Typography variant="h5" fontWeight={600} color="primary" gutterBottom sx={{ mt: 4 }}>
           Students
         </Typography>
         <List>
-          {students.map((student) => (
+        {students.map((student) => (
             <ListItem key={student._id}>
               <ListItemText
                 primary={<Typography fontWeight={600}>{student.name}</Typography>}
                 secondary={student.email}
               />
             </ListItem>
-          ))}
+        ))}
         </List>
       </Paper>
     </Box>

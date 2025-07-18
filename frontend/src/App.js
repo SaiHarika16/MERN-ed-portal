@@ -58,14 +58,14 @@ function App() {
   return (
     <Box>
       <LogoutAppBar />
-      <Routes>
+    <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/student" element={<StudentDashboard />} />
-        <Route path="/teacher" element={<TeacherDashboard />} />
-        <Route path="/admin" element={<AdminDashboard />} />
-      </Routes>
+      <Route path="/register" element={<Register />} />
+      <Route path="/student" element={<StudentDashboard />} />
+      <Route path="/teacher" element={<TeacherDashboard />} />
+      <Route path="/admin" element={<AdminDashboard />} />
+    </Routes>
     </Box>
   );
 }
