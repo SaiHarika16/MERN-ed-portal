@@ -1,5 +1,3 @@
-# edusphere-platform
-
 ## EduSphere: The Modern Education Platform
 
 EduSphere is a full-stack web application designed for educational institutions, teachers, and students. It provides a robust platform for user management, task assignment, and role-based dashboards, built with the MERN stack and a modern, elegant UI.
