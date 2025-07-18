@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Box, Typography, Paper, TextField, Button, Select, MenuItem, Alert, List, ListItem, ListItemText, FormControl, InputLabel } from '@mui/material';
 
 function TeacherDashboard() {
   const [students, setStudents] = useState([]);
-  const [tasks, setTasks] = useState([]);  // New: store tasks assigned by teacher
+  const [tasks, setTasks] = useState([]);
   const [form, setForm] = useState({
     title: '',
     description: '',
@@ -14,7 +15,6 @@ function TeacherDashboard() {
   const user = JSON.parse(localStorage.getItem('user'));
   const token = user?.token;
 
-  // Fetch list of students
   useEffect(() => {
     const fetchStudents = async () => {
       try {
@@ -26,11 +26,9 @@ function TeacherDashboard() {
         setMessage('Failed to fetch students');
       }
     };
-
     fetchStudents();
   }, [token]);
 
-  // Fetch tasks assigned by this teacher
   useEffect(() => {
     const fetchAssignedTasks = async () => {
       try {
@@ -42,16 +40,13 @@ function TeacherDashboard() {
         setMessage('Failed to fetch tasks');
       }
     };
-
     fetchAssignedTasks();
   }, [token]);
 
-  // Handle form input changes
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // Submit new task
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -60,8 +55,6 @@ function TeacherDashboard() {
       });
       setMessage('Task assigned successfully');
       setForm({ title: '', description: '', assignedTo: '' });
-
-      // Refresh tasks after assignment
       const res = await axios.get('http://localhost:5000/api/tasks/assigned', {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -72,50 +65,78 @@ function TeacherDashboard() {
   };
 
   return (
-    <div>
-      <h2>Teacher Dashboard</h2>
-      {message && <p>{message}</p>}
-
-      <form onSubmit={handleSubmit}>
-        <input
-          name="title"
-          placeholder="Task Title"
-          value={form.title}
-          onChange={handleChange}
-          required
-        />
-        <input
-          name="description"
-          placeholder="Description"
-          value={form.description}
-          onChange={handleChange}
-          required
-        />
-        <select name="assignedTo" value={form.assignedTo} onChange={handleChange} required>
-          <option value="">Select Student</option>
-          {students.map((s) => (
-            <option key={s._id} value={s._id}>
-              {s.name} ({s.email})
-            </option>
+    <Box sx={{ minHeight: '100vh', background: 'linear-gradient(135deg, #2196f3 0%, #21cbf3 100%)', p: 4 }}>
+      <Paper elevation={8} sx={{ maxWidth: 700, mx: 'auto', p: 4, borderRadius: 4 }}>
+        <Typography variant="h4" fontWeight={700} color="primary" gutterBottom>
+          Teacher Dashboard
+        </Typography>
+        {message && <Alert severity="info" sx={{ mb: 2 }}>{message}</Alert>}
+        <form onSubmit={handleSubmit} style={{ marginBottom: 32 }}>
+          <TextField
+            name="title"
+            label="Task Title"
+            value={form.title}
+            onChange={handleChange}
+            required
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            name="description"
+            label="Description"
+            value={form.description}
+            onChange={handleChange}
+            required
+            fullWidth
+            margin="normal"
+          />
+          <FormControl fullWidth margin="normal">
+            <InputLabel id="student-label">Assign To</InputLabel>
+            <Select
+              labelId="student-label"
+              name="assignedTo"
+              value={form.assignedTo}
+              label="Assign To"
+              onChange={handleChange}
+              required
+            >
+              <MenuItem value="">Select Student</MenuItem>
+              {students.map((s) => (
+                <MenuItem key={s._id} value={s._id}>
+                  {s.name} ({s.email})
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <Button type="submit" variant="contained" color="primary" size="large" sx={{ mt: 2 }}>
+            Assign Task
+          </Button>
+        </form>
+        <Typography variant="h5" fontWeight={600} color="primary" gutterBottom>
+          Assigned Tasks
+        </Typography>
+        <List>
+          {tasks.length === 0 && <ListItem>No tasks assigned yet.</ListItem>}
+          {tasks.map((task) => (
+            <ListItem key={task._id} alignItems="flex-start" sx={{ mb: 2, borderBottom: '1px solid #eee' }}>
+              <ListItemText
+                primary={<Typography fontWeight={600}>{task.title}</Typography>}
+                secondary={<>
+                  {task.description}
+                  <br />
+                  <Typography variant="body2" color="text.secondary">
+                    Assigned to: {task.assignedTo.name} ({task.assignedTo.email})
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Status: {task.status}
+                  </Typography>
+                </>}
+              />
+            </ListItem>
           ))}
-        </select>
-        <button type="submit">Assign Task</button>
-      </form>
-
-      <h3>Assigned Tasks</h3>
-      <ul>
-        {tasks.length === 0 && <li>No tasks assigned yet.</li>}
-        {tasks.map((task) => (
-          <li key={task._id} style={{ marginBottom: '1rem' }}>
-            <strong>{task.title}</strong> — {task.description}
-            <br />
-            Assigned to: {task.assignedTo.name} ({task.assignedTo.email})
-            <br />
-            Status: {task.status}
-          </li>
-        ))}
-      </ul>
-    </div>
+        </List>
+      </Paper>
+    </Box>
   );
 }
 

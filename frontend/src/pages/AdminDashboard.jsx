@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Box, Typography, Paper, List, ListItem, ListItemText, Alert } from '@mui/material';
 
 function AdminDashboard() {
   const [students, setStudents] = useState([]);
@@ -22,37 +23,47 @@ function AdminDashboard() {
         });
         setTeachers(teacherRes.data);
       } catch (err) {
-        console.error(err);
         setMessage('Failed to fetch users');
       }
     };
-
     fetchUsers();
   }, [token]);
 
   return (
-    <div>
-      <h2>Admin Dashboard</h2>
-      {message && <p>{message}</p>}
-
-      <h3>Teachers</h3>
-      <ul>
-        {teachers.map((teacher) => (
-          <li key={teacher._id}>
-            {teacher.name} — {teacher.email}
-          </li>
-        ))}
-      </ul>
-
-      <h3>Students</h3>
-      <ul>
-        {students.map((student) => (
-          <li key={student._id}>
-            {student.name} — {student.email}
-          </li>
-        ))}
-      </ul>
-    </div>
+    <Box sx={{ minHeight: '100vh', background: 'linear-gradient(135deg, #2196f3 0%, #21cbf3 100%)', p: 4 }}>
+      <Paper elevation={8} sx={{ maxWidth: 700, mx: 'auto', p: 4, borderRadius: 4 }}>
+        <Typography variant="h4" fontWeight={700} color="primary" gutterBottom>
+          Admin Dashboard
+        </Typography>
+        {message && <Alert severity="info" sx={{ mb: 2 }}>{message}</Alert>}
+        <Typography variant="h5" fontWeight={600} color="primary" gutterBottom>
+          Teachers
+        </Typography>
+        <List>
+          {teachers.map((teacher) => (
+            <ListItem key={teacher._id}>
+              <ListItemText
+                primary={<Typography fontWeight={600}>{teacher.name}</Typography>}
+                secondary={teacher.email}
+              />
+            </ListItem>
+          ))}
+        </List>
+        <Typography variant="h5" fontWeight={600} color="primary" gutterBottom sx={{ mt: 4 }}>
+          Students
+        </Typography>
+        <List>
+          {students.map((student) => (
+            <ListItem key={student._id}>
+              <ListItemText
+                primary={<Typography fontWeight={600}>{student.name}</Typography>}
+                secondary={student.email}
+              />
+            </ListItem>
+          ))}
+        </List>
+      </Paper>
+    </Box>
   );
 }
 

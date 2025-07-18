@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Box, Typography, Paper, Select, MenuItem, Alert, List, ListItem, ListItemText, FormControl, InputLabel } from '@mui/material';
 
 function StudentDashboard() {
   const [tasks, setTasks] = useState([]);
@@ -9,7 +10,6 @@ function StudentDashboard() {
   const token = user?.token;
   const studentId = user?._id;
 
-  // Fetch tasks for the logged-in student
   useEffect(() => {
     const fetchTasks = async () => {
       try {
@@ -20,14 +20,12 @@ function StudentDashboard() {
         });
         setTasks(res.data);
       } catch (err) {
-        console.error('Error fetching tasks:', err.response?.data || err.message);
+        setMessage('Error fetching tasks');
       }
     };
-
     fetchTasks();
   }, [studentId, token]);
 
-  // Handle status update
   const handleStatusChange = async (taskId, newStatus) => {
     try {
       await axios.put(
@@ -39,42 +37,46 @@ function StudentDashboard() {
           },
         }
       );
-
-      // Update local state
       setTasks((prevTasks) =>
-        prevTasks.map((task) =>
-          task._id === taskId ? { ...task, status: newStatus } : task
-        )
+        prevTasks.map((task) => (task._id === taskId ? { ...task, status: newStatus } : task))
       );
       setMessage('Task status updated!');
     } catch (err) {
-      console.error('Error updating status:', err.response?.data || err.message);
       setMessage('Error updating status');
     }
   };
 
   return (
-    <div>
-      <h2>Student Dashboard</h2>
-      {message && <p>{message}</p>}
-      <ul>
-        {tasks.map((task) => (
-          <li key={task._id} style={{ marginBottom: '1rem' }}>
-            <strong>{task.title}</strong> — {task.description}
-            <br />
-            <span>Status: </span>
-            <select
-              value={task.status}
-              onChange={(e) => handleStatusChange(task._id, e.target.value)}
-            >
-              <option value="pending">Pending</option>
-              <option value="progress">In Progress</option>
-              <option value="completed">Completed</option>
-            </select>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <Box sx={{ minHeight: '100vh', background: 'linear-gradient(135deg, #2196f3 0%, #21cbf3 100%)', p: 4 }}>
+      <Paper elevation={8} sx={{ maxWidth: 600, mx: 'auto', p: 4, borderRadius: 4 }}>
+        <Typography variant="h4" fontWeight={700} color="primary" gutterBottom>
+          Student Dashboard
+        </Typography>
+        {message && <Alert severity="info" sx={{ mb: 2 }}>{message}</Alert>}
+        <List>
+          {tasks.map((task) => (
+            <ListItem key={task._id} alignItems="flex-start" sx={{ mb: 2, borderBottom: '1px solid #eee' }}>
+              <ListItemText
+                primary={<Typography fontWeight={600}>{task.title}</Typography>}
+                secondary={task.description}
+              />
+              <FormControl sx={{ minWidth: 120 }} size="small">
+                <InputLabel>Status</InputLabel>
+                <Select
+                  value={task.status}
+                  label="Status"
+                  onChange={(e) => handleStatusChange(task._id, e.target.value)}
+                >
+                  <MenuItem value="pending">Pending</MenuItem>
+                  <MenuItem value="progress">In Progress</MenuItem>
+                  <MenuItem value="completed">Completed</MenuItem>
+                </Select>
+              </FormControl>
+            </ListItem>
+          ))}
+        </List>
+      </Paper>
+    </Box>
   );
 }
 
